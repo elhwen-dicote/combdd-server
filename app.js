@@ -5,7 +5,7 @@ var logger = require('morgan');
 const httpErrors = require('http-errors');
 const { formatError } = require('./local-util');
 
-const { router: caracterRouter } = require('./caracter');
+const { router: apiRouter } = require('./caracter');
 
 var app = express();
 
@@ -22,7 +22,7 @@ app.use(
         res.sendFile(path.join(__dirname, 'dist', 'combdd', 'index.html'));
     });
 
-app.use('/api/caracter', caracterRouter);
+app.use('/api', apiRouter);
 
 app.use(function (req, res, next) {
     next(httpErrors.NotFound(`resource not found for url ${req.originalUrl}`));

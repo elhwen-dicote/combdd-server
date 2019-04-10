@@ -7,19 +7,28 @@ const {
     deleteCaracter,
     getOneCaracter,
     updateCaracter,
+    getGroups,
+    saveGroup,
+    deleteGroup,
 } = require('./controller');
 
 const router = express.Router();
 
-router.get('', getCaracters);
+router.get('/caracter', getCaracters);
 
-router.post('', saveCaracter);
+router.post('/caracter', saveCaracter);
 
-router.put('/:id', updateCaracter);
+router.put('/caracter/:id', updateCaracter);
 
-router.delete('/:id', deleteCaracter);
+router.delete('/caracter/:id', deleteCaracter);
 
-router.get('/:id', getOneCaracter);
+router.get('/caracter/:id', getOneCaracter);
+
+router.get('/group',getGroups);
+
+router.post('/group', saveGroup);
+
+router.delete('/group/:id', deleteGroup);
 
 module.exports = {
     router,
