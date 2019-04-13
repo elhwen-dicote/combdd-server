@@ -54,6 +54,14 @@ async function deleteCaracter(req, res, next) {
         if (result.n === 0) {
             throw new httpErrors.NotFound('Caracter not found');
         }
+        await Group.updateMany({
+            members:id
+        },{
+            $pull: {
+                members:id
+            }
+        });
+
         res.json(formatSuccess(`Caracter id : ${id} successfully removed`));
     } catch (error) {
         next(error);
