@@ -10,6 +10,8 @@ const {
     getGroups,
     saveGroup,
     deleteGroup,
+    getOneGroup,
+    updateGroup,
 } = require('./controller');
 
 const router = express.Router();
@@ -24,11 +26,15 @@ router.delete('/caracter/:id', deleteCaracter);
 
 router.get('/caracter/:id', getOneCaracter);
 
-router.get('/group',getGroups);
+router.get('/group', getGroups);
 
 router.post('/group', saveGroup);
 
+router.put('/group/:id', updateGroup);
+
 router.delete('/group/:id', deleteGroup);
+
+router.get('/group/:id', getOneGroup);
 
 module.exports = {
     router,

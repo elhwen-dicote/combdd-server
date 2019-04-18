@@ -5,14 +5,16 @@ const { Caracter, Group } = require('./model');
 const { formatSuccess } = require('../local-util');
 
 module.exports = {
-    saveCaracter,
     getCaracters,
+    saveCaracter,
     deleteCaracter,
     getOneCaracter,
     updateCaracter,
     getGroups,
     saveGroup,
     deleteGroup,
+    getOneGroup,
+    updateGroup,
 };
 
 async function getCaracters(req, res, next) {
@@ -55,12 +57,12 @@ async function deleteCaracter(req, res, next) {
             throw new httpErrors.NotFound('Caracter not found');
         }
         await Group.updateMany({
-            members:id
-        },{
-            $pull: {
-                members:id
-            }
-        });
+            members: id
+        }, {
+                $pull: {
+                    members: id
+                }
+            });
 
         res.json(formatSuccess(`Caracter id : ${id} successfully removed`));
     } catch (error) {
@@ -139,6 +141,32 @@ async function deleteGroup(req, res, next) {
         }
         res.json(formatSuccess(`Caracter id : ${id} successfully removed`));
     } catch (error) {
+        next(error);
+    }
+}
+
+async function getOneGroup(req, res, next) {
+    try {
+        const id = req.params.id;
+        const group = await Group.findById(id).populate('members').exec();
+        res.json(formatSuccess(group));
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function updateGroup(req, res, next) {
+    try {
+        const id = req.params.id
+        const group = await Group.findByIdAndUpdate(id,
+            {
+                name: req.body.name,
+                members: req.body.members,
+            }, {
+                new: true,
+            }).populate('members').exec();
+            res.json(formatSuccess(group));
+        } catch (error) {
         next(error);
     }
 }
@@ -252,10 +280,10 @@ function buildRegexp(filter) {
     let regExp = null;
     if (filter) {
         try {
-            regExp = new RegExp(filter,'i');
+            regExp = new RegExp(filter, 'i');
         } catch (error) {
             const escaped = filter.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
-            regExp = new RegExp(escaped,'i');
+            regExp = new RegExp(escaped, 'i');
         }
     }
     return regExp;
